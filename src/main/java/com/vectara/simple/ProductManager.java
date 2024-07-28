@@ -266,7 +266,7 @@ public class ProductManager {
 		request.setSearch(searchCorporaParams);
 		
 		GenerationParameters generationParams = new GenerationParameters();
-		generationParams.setMaxUsedSearchResults(5);
+		generationParams.setMaxUsedSearchResults(10);
 		generationParams.setPromptName("vectara-summary-ext-v1.3.0");
 		generationParams.setResponseLanguage(Language.ENG);
 		
@@ -290,6 +290,7 @@ public class ProductManager {
 			
 			System.out.println("\tMetadata: " + JSON.serialize(filteredMetadata));
 			System.out.println("\tText: " + result.getText());
+			System.out.println("\tScore: " + result.getScore());
 			System.out.println("\n\n\n===========================================================");
 			index++;
 		}
