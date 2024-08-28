@@ -19,6 +19,7 @@ import com.vectara.api.UploadApi;
 import com.vectara.client.YamlAppConfig;
 import com.vectara.client.auth.AuthUtil;
 import com.vectara.client.config.VectaraConfig;
+import com.vectara.client.config.YamlConfigUtil;
 import com.vectara.model.Corpus;
 import com.vectara.model.CreateCorpusRequest;
 import com.vectara.model.FilterAttribute;
@@ -47,6 +48,8 @@ public class ProductManager {
 
 	private boolean initializeCorpus = true;
 
+	private String profile = null;
+	
 	/**
 	 * This will create our instance of a product manager, ensuring that our corpus
 	 * is setup and creating if not already present.
@@ -64,8 +67,14 @@ public class ProductManager {
 		// You can wire authentication into the client however you please, this is just
 		// a convenient way to do it
 		// with code examples that avoids putting credentials into your projects.
-		YamlAppConfig yamlConfig = new YamlAppConfig();
-		VectaraConfig config = yamlConfig.getVectaraConfig();
+		
+		VectaraConfig config = null;
+		if (profile == null) {
+			YamlAppConfig yamlConfig = new YamlAppConfig();
+			config = yamlConfig.getVectaraConfig();
+		} else {
+			config = new YamlConfigUtil().readYaml(profile);
+		}
 
 		// Manually Wire Spring beans for now.
 		AuthUtil authUtil = new AuthUtil();
@@ -81,7 +90,9 @@ public class ProductManager {
 			delete();
 			initializeCorpus();
 		} else {
-			findCorpusByName();
+			if (this.corpusKey == null) {
+				findCorpusByName();
+			}
 		}
 	}
 
@@ -359,5 +370,15 @@ public class ProductManager {
 	public void setInitializeCorpus(boolean initializeCorpus) {
 		this.initializeCorpus = initializeCorpus;
 	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
+	public void setCorpusKey(String corpusKey) {
+		this.corpusKey = corpusKey;
+	}
+	
+	
 
 }
